@@ -1,5 +1,8 @@
 ### Note
 
+For macOS High Sierra, follow [README.md for High Sierra](HighSierra/README.md).
+Consult this document for debugging and general tips.
+
 See the [debugging section below](https://github.com/kholia/OSX-KVM#debugging)
 and closed issues before opening a new issue.
 
@@ -16,7 +19,7 @@ Known to work on:
 Tested with QEMU 2.4.1, 2.5, 2.6.1, and 2.8.
 
 AMD CPU(s) are known to be problematic. AMD FX-8350 works but Phenom II X3 720
-does not.
+does not. A CPU with SSE4.1 support is required for macOS Sierra.
 
 Intel VT-x / AMD SVM is required.
 
@@ -67,9 +70,12 @@ Intel VT-x / AMD SVM is required.
 
 ### Installation
 
-To install OS X, you can use the included `boot.sh` / `boot-macOS.sh` scripts
-for a more solid alternate to the following `virsh` method. Use either the
-`boot*.sh` method or the following `virsh` method to install OS X / macOS.
+To install OS X, you can use the included `boot-macOS.sh` script for a more
+solid alternate to the following `virsh` method. Use either the `boot-macOS.sh`
+method or the following `virsh / virt-manager` method to install OS X / macOS.
+
+Update: The `virt-manager` method is no longer recommended, and no support is
+provided for it.
 
 * Edit `macOS-libvirt.xml` file and change file paths for `mac_hdd.qcow2` (HDD), `Install_OS_X_10.11_El_Capitan.iso` (bootable ISO image) and `enoch_rev2839_boot` suitably.
 
@@ -185,7 +191,19 @@ for a more solid alternate to the following `virsh` method. Use either the
 
 * If the App Store doesn't work, check the [notes file](notes.md) for instructions on how to solve this.
 
-* If you are getting "Dont_Steal_MacOS" related errors, see `FakeSMC installation` section in [notes file](notes.md).
+* If you are getting "Dont_Steal_MacOS" related errors, see `Building QEMU` (recommended option) and
+  `FakeSMC installation` sections in [notes file](notes.md).
+
+* If the boot process is getting stuck on the Apple logo, upgrade your host
+  kernel and QEMU. For example, Linux 3.16.x from Debian 8 is known to be
+  problematic, whereas Linux 4.9.x with QEMU 2.8.x works fine on the same
+  distribution.
+
+### Is This Legal?
+
+The "secret" Apple OSK string is widely available on the Internet. It is also included in a public court document [available here](http://www.rcfp.org/sites/default/files/docs/20120105_202426_apple_sealing.pdf). I am not a lawyer but it seems that Apple's attempt(s) to get the OSK string treated as a trade secret did not work out. Due to these reasons, the OSK string is freely included in this repository.
+
+Gabriel Somlo also has [some thoughts](http://www.contrib.andrew.cmu.edu/~somlo/OSXKVM/#sec_4) on the legal aspects involved in running macOS under QEMU/KVM.
 
 ### References
 
@@ -194,3 +212,7 @@ for a more solid alternate to the following `virsh` method. Use either the
 * [Mac OS X 10.11 El Capitan – VM on unRAID](https://macosxvirtualmachinekvm.wordpress.com/guide-mac-os-x-10-11-el-capitan-vm-on-unraid/)
 
 * http://www.contrib.andrew.cmu.edu/~somlo/OSXKVM/
+
+* https://www.kraxel.org/blog/2017/09/running-macos-as-guest-in-kvm/
+
+* http://forge.voodooprojects.org/p/chameleon/source/changes/HEAD/ (Enoch source)
